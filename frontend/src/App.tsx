@@ -55,7 +55,7 @@ export default function App() {
         <div className="chat-header__left">
           <span className="logo-mark logo-mark--sm">B</span>
           <div>
-            <div className="chat-header__name">Buink Chat</div>
+            <div className="chat-header__name">Blink Chat</div>
             <div className={`chat-header__status ${statusClass}`}>
               <span className="status__dot" />
               {statusLabel}
@@ -111,7 +111,7 @@ export default function App() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Message Buink Chat…"
+            placeholder="Message Blink Chat…"
             disabled={!connected}
           />
           <button
