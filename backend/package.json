@@ -1,0 +1,29 @@
+{
+  "name": "chatbot-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx --env-file=.env.local chatbot.ts",
+    "api-key:generate": "tsx --env-file=.env.local scripts/generate-api-key.ts",
+    "kb:ingest": "tsx --env-file=.env.local scripts/kb-ingest.ts",
+    "kb:diagnose": "tsx --env-file=.env.local scripts/kb-diagnose.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file=.env.local scripts/migrate.ts",
+    "db:query": "tsx --env-file=.env.local scripts/db-query.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/groq": "^3.0.41",
+    "@ai-sdk/openai": "^3.0.71",
+    "@yuaskme/chatbot-sdk": "^1.0.1",
+    "ai": "5.0.0-beta.6",
+    "drizzle-orm": "^0.34.0",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.6",
+    "drizzle-kit": "^0.25.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  },
+  "packageManager": "pnpm@9.12.3"
+}
