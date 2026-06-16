@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState, useCallback, FormEvent } from 'react';
 import { ChatbotClient, ChatbotMessage } from './chatbot-client';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
-const API_KEY    = import.meta.env.VITE_API_KEY ?? 'bk_7ce1641a70c20cd5136d4ab9b90821bd96f31a32b3f410d62321218fc1fb1100';
+const DEFAULT_SERVER_URL = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
+const DEFAULT_API_KEY    = import.meta.env.VITE_API_KEY    ?? 'bk_7ce1641a70c20cd5136d4ab9b90821bd96f31a32b3f410d62321218fc1fb1100';
 
 export default function App() {
+  const [serverUrl, setServerUrl] = useState(DEFAULT_SERVER_URL);
+  const [apiKey, setApiKey]       = useState(DEFAULT_API_KEY);
+
   const [connected, setConnected] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [messages, setMessages]   = useState<ChatbotMessage[]>([]);
@@ -15,8 +18,23 @@ export default function App() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
 
+  // Receive serverUrl + apiKey from the WordPress parent via postMessage.
   useEffect(() => {
-    const client = new ChatbotClient({ serverUrl: SERVER_URL });
+    function handleMessage(e: MessageEvent) {
+      if (e.data?.type === 'buink-config') {
+        if (e.data.serverUrl) setServerUrl(e.data.serverUrl);
+        if (e.data.apiKey)    setApiKey(e.data.apiKey);
+      }
+    }
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // Re-connect whenever serverUrl or apiKey changes.
+  useEffect(() => {
+    clientRef.current?.disconnect();
+
+    const client = new ChatbotClient({ serverUrl });
     clientRef.current = client;
 
     client.onConnection((c) => setConnected(c));
@@ -24,11 +42,11 @@ export default function App() {
     client.onTyping((t) => setIsTyping(t));
     client.onMessage((msg) => setMessages((prev) => [...prev, msg]));
 
-    client.connect(API_KEY);
+    client.connect(apiKey);
     inputRef.current?.focus();
 
     return () => client.disconnect();
-  }, []);
+  }, [serverUrl, apiKey]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
