@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback, FormEvent } from 'react';
 import { ChatbotClient, ChatbotMessage } from './chatbot-client';
 
-const SERVER_URL = 'http://localhost:3001';
-const API_KEY    = 'bk_7ce1641a70c20cd5136d4ab9b90821bd96f31a32b3f410d62321218fc1fb1100';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
+const API_KEY    = import.meta.env.VITE_API_KEY ?? 'bk_7ce1641a70c20cd5136d4ab9b90821bd96f31a32b3f410d62321218fc1fb1100';
 
 export default function App() {
   const [connected, setConnected] = useState(false);
