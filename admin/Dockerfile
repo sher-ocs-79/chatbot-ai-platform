@@ -11,7 +11,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /app
 WORKDIR /app
 
-RUN composer install --no-dev --optimize-autoloader --no-audit
+RUN composer install --no-dev --optimize-autoloader --no-security-blocking
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
