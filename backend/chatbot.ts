@@ -21,7 +21,7 @@ import { searchKnowledge } from './knowledgeService';
 import { violationCheckStep } from './violationGuard';
 import { getUserByApiKey } from './db';
 
-const PORT = Number(process.env.CHATBOT_PORT ?? 3001);
+const PORT = Number(process.env.PORT ?? process.env.CHATBOT_PORT ?? 3001);
 
 
 const CHAT_MODEL_ID = process.env.CHATBOT_CHAT_MODEL ?? 'llama-3.3-70b-versatile';
