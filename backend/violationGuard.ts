@@ -209,6 +209,8 @@ export function createViolationCheckStep(deps: ViolationDeps) {
 
     if (classification !== 'VIOLATION') return ctx; // SAFE or OFF_TOPIC — continue
 
+    console.log(`[violation-guard] ${ctx.socket.id}: violated message: "${ctx.message.message}"`);
+
     // ── 4. Record violation ──────────────────────────────────────────────────
     let newCount: number;
     let shouldDisable: boolean;
