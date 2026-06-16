@@ -3,9 +3,15 @@ set -e
 
 cd /app
 
-# Map Railway's DATABASE_URL to DB_URL if not set separately
-if [ -n "$DATABASE_URL" ] && [ -z "$DB_URL" ]; then
-    export DB_URL="$DATABASE_URL"
+# Parse DATABASE_URL into components Laravel understands.
+# Laravel's URL parser strips query params, so sslmode must be set separately.
+if [ -n "$DATABASE_URL" ]; then
+    # Extract sslmode from query string before passing the URL to Laravel
+    SSLMODE=$(echo "$DATABASE_URL" | grep -oP '(?<=sslmode=)[^&]+' || true)
+    export DB_SSLMODE="${SSLMODE:-prefer}"
+
+    # Strip the query string — Laravel doesn't parse it from DB_URL
+    export DB_URL=$(echo "$DATABASE_URL" | sed 's/?.*//')
 fi
 
 # Create required storage directories
